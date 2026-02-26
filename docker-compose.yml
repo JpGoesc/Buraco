@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: djangodb
+      MYSQL_USER: django
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      # Mount initialization scripts from ./db
+      - ./db:/docker-entrypoint-initdb.d
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  web:
+    build: ./apps
+    # Set the working directory inside the container to where the app code is
+    working_dir: /workspace
+    command: sleep infinity
+    volumes:
+      # Mount the entire repository to /workspace
+      - ./apps:/workspace
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      # Database settings
+      DB_NAME: djangodb
+      DB_USER: django
+      DB_PASSWORD: password
+      DB_HOST: db
+      DB_PORT: 3306
+
+volumes:
+  mysql-data:

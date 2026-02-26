@@ -1,0 +1,23 @@
+{
+    "name": "Python app Dev Container",
+    "dockerComposeFile": [
+        "../../docker-compose.yml"
+    ],
+    "service": "web",
+    "workspaceFolder": "/workspace",
+    "remoteUser": "root",
+
+    "forwardPorts": [8000, 3306],
+
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "saoudrizwan.claude-dev",
+                "eamodio.gitlens",
+                "MS-vsliveshare.vsliveshare"
+            ]
+        }
+    }
+}
